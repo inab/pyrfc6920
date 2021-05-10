@@ -1,0 +1,11 @@
+# Environments
+.*[eE]nv/
+
+# byte-compiled / optimized / DLL files
+__pycache__/
+
+# setuptools leftovers
+build/
+dist/
+*.egg-info/
+
