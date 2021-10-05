@@ -58,6 +58,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/inab/pyrfc6920",
+	project_urls={
+		"Bug Tracker": "https://github.com/inab/pyrfc6920/issues"
+	},
     packages=setuptools.find_packages(),
     install_requires=requirements,
     classifiers=[
@@ -66,4 +69,5 @@ setuptools.setup(
         "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
         "Operating System :: OS Independent",
     ],
+	python_requires=">=3.6",
 )
