@@ -2,7 +2,7 @@
 
 Naming Things with Hashes [IETF RFC 6920](https://datatracker.ietf.org/doc/html/rfc6920) specifies both `ni` and `nih` schemes, and how they are generated and validated.
 
-This library is composed by methods `generate_ni` (to generate a `ni` URI), `generate_nih` (to generate a `nih` URI) and `validate` (to validate `ni` and `nih` URIs). Both `generate_ni`, `generate_nih` and `validate` understand both file paths and bytearray.
+This library is composed by methods `generate_ni` (to generate a `ni` URI), `generate_nih` (to generate a `nih` URI), `extract_digest` (to get back both the digest and the hashing algorithm) and `validate` (to validate `ni` and `nih` URIs). Both `generate_ni`, `generate_nih` and `validate` understand both file paths and bytearray.
 
 ```python
 rfc6920.generate_nih(b'Hello World!') 

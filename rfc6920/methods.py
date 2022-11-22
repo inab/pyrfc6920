@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # rfc6920, a library to generate and validate RFC6920 URIs
-# Copyright (C) 2021 Barcelona Supercomputinh Center, José M. Fernández
+# Copyright (C) 2022 Barcelona Supercomputinh Center, José M. Fernández
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,7 @@ import urllib.parse
 
 from typing import Union
 
-INDEXED_HASH_NAMES = [
+INDEXED_HASH_NAMES: "Sequence[None, Mapping[str, Union[str, int, None]]]" = [
 	None,	# Reserved
 	{
 		'name': 'sha-256',
@@ -67,7 +67,7 @@ NIH_SCHEME = 'nih'
 HASH_NAMES = { desc['name']: desc  for desc in filter(lambda desc: desc is not None, INDEXED_HASH_NAMES) }
 
 STATIC_DEFAULT_BUFFER_SIZE=65536
-def compute_digest_from_filelike_and_callback(filelike, h:_hashlib.HASH, bufferSize=STATIC_DEFAULT_BUFFER_SIZE, cback=None):
+def compute_digest_from_filelike_and_callback(filelike: "IO[bytes]", h: "_hashlib.HASH", bufferSize: "int" = STATIC_DEFAULT_BUFFER_SIZE, cback=None) -> "bytes":
 	"""
 	Accessory method used to compute the digest of an input file-like object
 	"""
@@ -81,7 +81,7 @@ def compute_digest_from_filelike_and_callback(filelike, h:_hashlib.HASH, bufferS
 		
 	return h.digest()
 
-def _generate_ni_pre(filename, algo='sha-256', trunc=None):
+def _generate_ni_pre(filename: "Union[str, bytes, bytearray]", algo: "Union[str, int, _hashlib.HASH]" = 'sha-256', trunc: "Optional[int]" = None) -> "Tuple[bytes, Mapping[str, Union[str, int, _hashlib.HASH]]":
 	"""
 	The first parameter can be either the suite id (an integer)
 	or an algorithm
@@ -140,14 +140,14 @@ def _generate_ni_pre(filename, algo='sha-256', trunc=None):
 	
 	return digest, desc
 
-def prettify_digest(digest:bytes) -> str:
+def prettify_digest(digest: "Union[bytes, bytearray]") -> "str":
 	pretty_digest = ''
 	for ib, b in enumerate(digest):
 		pretty_digest += ('-{:02x}'  if ib > 0 and (ib & 1) == 0  else '{:02x}').format(b)
 	
 	return pretty_digest
 
-def generate_nih_from_digest(digest:Union[bytes, bytearray], algo='sha-256', trunc=None):
+def generate_nih_from_digest(digest: "Union[bytes, bytearray]", algo: "str" = 'sha-256', trunc: "Optional[int]" = None) -> "str":
 	# First, let's truncate to the bytes limit
 	if trunc is not None:
 		truncbytes = trunc // 8
@@ -159,12 +159,12 @@ def generate_nih_from_digest(digest:Union[bytes, bytearray], algo='sha-256', tru
 	
 	return urllib.parse.urlunparse((NIH_SCHEME,'','{};{};{:x}'.format(algo,pretty_digest,checkdigit),'','',''))
 
-def generate_nih(filename, algo='sha-256', trunc=None):
+def generate_nih(filename: "Union[str, bytes, bytearray]", algo: "Union[str, int, _hashlib.HASH]" = 'sha-256', trunc: "Optional[int]" = None) -> "str":
 	digest, desc = _generate_ni_pre(filename, algo, trunc)
 	
 	return generate_nih_from_digest(digest, desc['name'], desc['trunc'])
 
-def generate_ni_from_digest(digest:Union[bytes, bytearray], algo='sha-256', trunc=None, authority=''):
+def generate_ni_from_digest(digest: "Union[bytes, bytearray]", algo: "str" = 'sha-256', trunc: "Optional[int]" = None, authority: "str" = '') -> "str":
 	# First, let's truncate to the bytes limit
 	if trunc is not None:
 		truncbytes = trunc // 8
@@ -180,15 +180,19 @@ def generate_ni_from_digest(digest:Union[bytes, bytearray], algo='sha-256', trun
 	
 	return urllib.parse.urlunparse((NI_SCHEME,authority,upat.format(algo,b64digest),'','',''))
 
-def generate_ni(filename, algo='sha-256', trunc=None):
+def generate_ni(filename: "Union[str, bytes, bytearray]", algo: "Union[str, int, _hashlib.HASH]" = 'sha-256', trunc: "Optional[int]" = None) -> "str":
 	digest, desc = _generate_ni_pre(filename, algo, trunc)
 	
 	return generate_ni_from_digest(digest, desc['name'], desc['trunc'])
 
-def validate(the_uri, filename):
+def extract_digest(the_uri: "str") -> "Union[Tuple[None, None], Tuple[Union[Literal[False], bytes, bytearray], str]]":
+	"""
+	It extracts both the digest and the hashing algorithm from
+	nih and ni URIs
+	"""
 	parsed = urllib.parse.urlparse(the_uri)
 	if parsed.scheme not in (NI_SCHEME, NIH_SCHEME):
-		return None
+		return None, None
 	
 	lsemicolon = parsed.path.index(';')
 	algo = parsed.path[0:lsemicolon]
@@ -206,13 +210,21 @@ def validate(the_uri, filename):
 			
 			# Return false if the check digit validation fails
 			if not genluhn.validate(hexdigest, 16, checkdigit):
-				return False
+				return False, algo
 		else:
 			hexdigest = encoded_digest
 		
 		digest = bytearray.fromhex(hexdigest.replace('-',''))
 	else:
 		digest = base64.urlsafe_b64decode(encoded_digest)
+	
+	return digest, algo
+
+def validate(the_uri: "str", filename: "Union[str, bytes, bytearray]") -> "bool":
+	digest, algo = extract_digest(the_uri)
+	
+	if not isinstance(digest, (bytes, bytearray)):
+		return False
 	
 	computed_digest, _ = _generate_ni_pre(filename, algo)
 	

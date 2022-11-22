@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # rfc6920, a library to generate and validate RFC6920 URIs
-# Copyright (C) 2021 Barcelona Supercomputinh Center, José M. Fernández
+# Copyright (C) 2022 Barcelona Supercomputinh Center, José M. Fernández
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 __author__ = 'José M. Fernández <https://orcid.org/0000-0002-4806-5140>'
-__copyright__ = '© 2021 Barcelona Supercomputing Center (BSC), ES'
+__copyright__ = '© 2022 Barcelona Supercomputing Center (BSC), ES'
 __license__ = 'LGPL-2.1'
 
 # https://www.python.org/dev/peps/pep-0396/
-__version__ = '0.1.2'
+__version__ = '0.1.3'

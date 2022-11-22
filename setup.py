@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # rfc6920, a library to generate and validate RFC6920 URIs
-# Copyright (C) 2021 Barcelona Supercomputinh Center, José M. Fernández
+# Copyright (C) 2022 Barcelona Supercomputinh Center, José M. Fernández
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
