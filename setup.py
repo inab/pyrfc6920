@@ -36,38 +36,37 @@ from rfc6920 import __license__ as rfc6920_license
 # Populating the long description
 readme_path = os.path.join(setupDir, "README.md")
 with open(readme_path, "r") as fh:
-    long_description = fh.read()
+	long_description = fh.read()
 
 # Populating the install requirements
 requirements = []
 requirements_path = os.path.join(setupDir, "requirements.txt")
 if os.path.exists(requirements_path):
-    with open(requirements_path) as f:
-        egg = re.compile(r"#[^#]*egg=([^=&]+)")
-        for line in f.read().splitlines():
-            m = egg.search(line)
-            requirements.append(line if m is None else m.group(1))
+	with open(requirements_path) as f:
+		egg = re.compile(r"#[^#]*egg=([^=&]+)")
+		for line in f.read().splitlines():
+			m = egg.search(line)
+			requirements.append(line if m is None else m.group(1))
 
 setuptools.setup(
-    name="rfc6920",
-    version=rfc6920_version,
-    author=rfc6920_author,
-    author_email="jose.m.fernandez@bsc.es",
-    license=rfc6920_license,
-    description="A library to generate and validate RFC6920 URIs",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/inab/pyrfc6920",
-	project_urls={
-		"Bug Tracker": "https://github.com/inab/pyrfc6920/issues"
-	},
-    packages=setuptools.find_packages(),
-    install_requires=requirements,
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "Development Status :: 3 - Alpha",
-        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
-        "Operating System :: OS Independent",
-    ],
+	name="rfc6920",
+	version=rfc6920_version,
+	author=rfc6920_author,
+	author_email="jose.m.fernandez@bsc.es",
+	license=rfc6920_license,
+	description="A library to generate and validate RFC6920 URIs",
+	long_description=long_description,
+	long_description_content_type="text/markdown",
+	url="https://github.com/inab/pyrfc6920",
+	project_urls={"Bug Tracker": "https://github.com/inab/pyrfc6920/issues"},
+	packages=setuptools.find_packages(),
+	package_data={"rfc6920": ["py.typed"]},
+	install_requires=requirements,
+	classifiers=[
+		"Programming Language :: Python :: 3",
+		"Development Status :: 3 - Alpha",
+		"License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+		"Operating System :: OS Independent",
+	],
 	python_requires=">=3.6",
 )

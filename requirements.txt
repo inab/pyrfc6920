@@ -1,1 +1,1 @@
-genluhn >= 0.3.0
+genluhn >= 0.3.1

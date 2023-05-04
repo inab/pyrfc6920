@@ -15,13 +15,13 @@ jobs:
         with:
           python-version: '3.x'
       - name: Install development dependencies
-        uses: py-actions/py-dependency-install@v2.1.0
+        uses: py-actions/py-dependency-install@v4.0.0
         with:
           path: "dev-requirements.txt"
       - name: Build packages to be uploaded
         run: python -m build
       - name: pypi-publish
-        uses: pypa/gh-action-pypi-publish@v1.4.2
+        uses: pypa/gh-action-pypi-publish@v1.8.6
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
