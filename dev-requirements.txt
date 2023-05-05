@@ -8,4 +8,5 @@ tan >= 22.8.0
 typing-extensions
 pydeps
 build
+keyring
 twine

@@ -120,11 +120,13 @@ def _generate_ni_pre(
 			if trunc is not None:
 				name += "-" + str(trunc)
 			desc = {"name": name, "algo": algo, "trunc": trunc}
-		elif (trunc is not None) and (desc.get("trunc") is None):
+		elif (trunc is not None) and (gotdesc.get("trunc") is None):
 			# Overriding default value
 			desc = gotdesc.copy()
 			desc["trunc"] = trunc
 			desc["name"] += "-{}".format(trunc)
+		else:
+			desc = gotdesc
 	elif isinstance(algo, int):
 		if algo < 1 or algo >= len(INDEXED_HASH_NAMES):
 			raise ValueError(
